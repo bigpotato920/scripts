@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python /home/root/Tools/goagent/local/proxy.py
+
+exit 0
