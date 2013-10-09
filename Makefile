@@ -1,7 +1,8 @@
-TARGET = pro1 
+TARGET = iridium 
 
 CC=gcc
 CFLAGS=-g -Wall
+LDFLAGS=-lpthread
 
 SRCDIR = src
 OBJDIR = obj
@@ -13,10 +14,10 @@ SOURCES := $(wildcard $(SRCDIR)/*.c)
 OBJECTS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SOURCES))
 
 $(BINDIR)/$(TARGET):$(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $@
-	
-$(OBJECTS):$(SOURCES)
-	$(CC) $(CFLAGS) $< -c -o $@
+	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
+	$(CC) -c  $(CFLAGS) $< -o $@
 	
 build:
 	@mkdir -p obj

@@ -12,9 +12,10 @@ script_dir=$(dirname $0)
 mkdir $pro_name
 cd $pro_name
 mkdir 'src'
+mkdir 'config'
 
 cp $script_dir/Makefile .
-sed -i "s/TARGET = XXX/TARGET = $pro_name/" ./Makefile
+sed -i "s/TARGET = pro1/TARGET = $pro_name/" ./Makefile
 
 make build
 
