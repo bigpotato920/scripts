@@ -1,36 +1,29 @@
-TARGET = iridium 
-
+TARGET = iridium-frontend 
 CC=gcc
 CFLAGS=-g -Wall
-LDFLAGS=-lpthread
+LDFLAGS=
 
-SRCDIR = src
-OBJDIR = obj
-BINDIR = bin
 
-BIN_NAME := $(BINDIR)/$(TARGET)
+BIN_NAME = $(TARGET)
 
-SOURCES := $(wildcard $(SRCDIR)/*.c)
-OBJECTS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o,$(SOURCES))
+SOURCES = $(wildcard *.c)
+OBJECTS = $(patsubst %.c, %.o,$(SOURCES))
 
-$(BINDIR)/$(TARGET):$(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
+$(TARGET) : Makefile.dependencies $(OBJECTS)
+	$(CC) -o $@ $(OBJECTS) $(LDFLAGS)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/%.h
-	$(CC) -c  $(CFLAGS) $< -o $@
+Makefile.dependencies:: $(SOURCES) $(HEADERS)
+	$(CC) $(CFLAGS) -MM $(SOURCES) > Makefile.dependencies
+
+-include Makefile.dependencies
 	
 build:
-	@mkdir -p obj
-	@mkdir -p bin
 	@mkdir -p tests
-
-run:
-	@$(BIN_NAME)
 
 valgrind:
 	@valgrind "--track-origins=yes" $(BIN_NAME)
 
 clean:
-	rm -rf bin/*
-	rm -rf obj/*
-
+	rm -rf $(TARGET) 
+	rm -rf *.o
+	rm -rf Makefile.dependencies
